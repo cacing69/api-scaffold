@@ -26,12 +26,16 @@ func CreateUser(c *gin.Context) {
 	}{}
 
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"errors": lib.Validate(err)})
+		c.JSON(http.StatusBadRequest, gin.H{"errors": lib.V.Req.Validate(err)})
 		return
 	}
 
 	user := mod.User{Name: req.Name, Email: req.Email, Password: req.Password}
-	db.T.Create(&user)
+
+	if err := db.T.Create(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{err.Error()}})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
