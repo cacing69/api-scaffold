@@ -1,18 +1,24 @@
-package config
+package conf
 
 import (
 	"log"
 
 	"github.com/spf13/viper"
-	// "gopkg.in/validator.v2"
 )
 
-func init() {
-	readConfig()
-	// registerValidator()
+type Db struct {
+	Port int
+	Name string
 }
 
-func readConfig() {
+type conf struct {
+	Db Db
+}
+
+var T conf
+
+func init() {
+	// readConfig()
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.SetConfigName("app.config")
@@ -22,8 +28,11 @@ func readConfig() {
 	if err != nil {
 		log.Println(err.Error())
 	}
+
+	fill()
 }
 
-// func registerValidator() {
-// 	validator.SetValidationFunc("notzz", lib.NotZZ)
-// }
+func fill() {
+	T.Db.Port = viper.GetInt("database.port")
+	T.Db.Name = viper.GetString("database.name")
+}

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"api-sambasku/conf"
 	"api-sambasku/mod"
 	"fmt"
 	"log"
@@ -21,14 +22,12 @@ var Name string
 func init() {
 	Type = viper.GetString("database.type")
 	Host = viper.GetString("database.host")
-	Port = viper.GetString("database.port")
 	Password = viper.GetString("database.password")
 	UserName = viper.GetString("database.username")
-	Name = viper.GetString("database.name")
 }
 
 func Connect() {
-	format := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", UserName, Password, Host, Port, Name)
+	format := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", UserName, Password, Host, conf.T.Db.Port, conf.T.Db.Name)
 	log.Println(format)
 	database, err := gorm.Open(Type, format)
 
