@@ -1,39 +1,40 @@
-package controllers
+package ctrl
 
 import (
-	"api-sambasku/models"
-	"api-sambasku/validate"
+	"api-sambasku/db"
+	"api-sambasku/mod"
+	"api-sambasku/val"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func IndexUser(c *gin.Context) {
-	var users []models.UserModel
+	var users []mod.UserMod
 
-	models.DB.Find(&users)
+	db.T.Find(&users)
 
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
 func CreateUser(c *gin.Context) {
-	var input validate.UserInputCreate
+	var input val.UserCreateVal
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user := models.UserModel{Name: input.Name, Email: input.Email, Password: input.Password}
-	models.DB.Create(&user)
+	user := mod.UserMod{Name: input.Name, Email: input.Email, Password: input.Password}
+	db.T.Create(&user)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 func FindUser(c *gin.Context) {
-	var user models.UserModel
+	var user mod.UserMod
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := db.T.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "record_not_found"})
 	}
 
@@ -41,35 +42,30 @@ func FindUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	var user models.UserModel
+	var user mod.UserMod
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := db.T.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "record_not_found"})
 	}
 
-	var input validate.UserInputUpdate
+	var input val.UserUpdateVal
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	models.DB.Model(&user).Updates(input)
+	db.T.Model(&user).Updates(input)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 func DeleteUser(c *gin.Context) {
-	var user models.UserModel
+	var user mod.UserMod
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := db.T.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "record_not_found"})
 	}
 
-	var input validate.UserInputUpdate
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-
-	models.DB.Delete(&user)
+	db.T.Delete(&user)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
