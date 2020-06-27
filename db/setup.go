@@ -35,7 +35,7 @@ func Connect() {
 		panic(err.Error())
 	}
 
-	database.AutoMigrate(&mod.User{})
+	database.AutoMigrate(&mod.Tester{})
 
 	T = database
 }

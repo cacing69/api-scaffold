@@ -18,11 +18,11 @@ func main() {
 		c.JSON(200, gin.H{"data": appName})
 	})
 
-	r.GET("/users", action.IndexUser)
-	r.POST("/user", action.CreateUser)
-	r.GET("/user/:id", action.FindUser)
-	r.PATCH("/user/:id", action.UpdateUser)
-	r.DELETE("/user/:id", action.DeleteUser)
+	r.GET("/tester", action.IndexTester)
+	r.POST("/tester", action.CreateTester)
+	r.GET("/tester/:id", action.FindTester)
+	r.PATCH("/tester/:id", action.UpdateTester)
+	r.DELETE("/tester/:id", action.DeleteTester)
 
 	r.Run(port)
 }
