@@ -3,7 +3,7 @@ package controller
 import (
 	"api-scaffold/db"
 	"api-scaffold/lib"
-	"api-scaffold/mod"
+	"api-scaffold/model"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,7 +12,7 @@ import (
 )
 
 func IndexTester(c *gin.Context) {
-	var data []mod.Tester
+	var data []model.Tester
 	var count int
 
 	// done := make(chan bool)
@@ -28,7 +28,7 @@ func IndexTester(c *gin.Context) {
 	_id := c.Query("id")
 	_key := c.Query("key")
 
-	q := db.T.Model(&mod.Tester{})
+	q := db.T.Model(&model.Tester{})
 
 	log.Println(_id)
 	log.Println(len(_id))
@@ -84,7 +84,7 @@ func CreateTester(c *gin.Context) {
 		return
 	}
 
-	data := mod.Tester{Key: req.Key, Value: req.Value}
+	data := model.Tester{Key: req.Key, Value: req.Value}
 
 	if err := db.T.Create(&data).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{err.Error()}})
@@ -95,7 +95,7 @@ func CreateTester(c *gin.Context) {
 }
 
 func FindTester(c *gin.Context) {
-	var data mod.Tester
+	var data model.Tester
 
 	if err := db.T.Where("id = ?", c.Param("id")).First(&data).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"record_not_found"}})
@@ -105,7 +105,7 @@ func FindTester(c *gin.Context) {
 }
 
 func UpdateTester(c *gin.Context) {
-	var test mod.Tester
+	var test model.Tester
 
 	if err := db.T.Where("tester_id = ?", c.Param("id")).First(&test).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"record_not_found"}})
@@ -127,7 +127,7 @@ func UpdateTester(c *gin.Context) {
 }
 
 func DeleteTester(c *gin.Context) {
-	var data mod.Tester
+	var data model.Tester
 
 	if err := db.T.Where("id = ?", c.Param("id")).First(&data).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": []string{"record_not_found"}})
