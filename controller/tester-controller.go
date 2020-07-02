@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"api-sambasku/db"
-	"api-sambasku/lib"
-	"api-sambasku/mod"
+	"api-scaffold/db"
+	"api-scaffold/lib"
+	"api-scaffold/mod"
 	"log"
 	"net/http"
 	"strconv"

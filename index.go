@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "api-sambasku/conf"
-	"api-sambasku/controller"
-	"api-sambasku/db"
+	_ "api-scaffold/conf"
+	"api-scaffold/controller"
+	"api-scaffold/db"
 
 	"github.com/gin-gonic/gin"
 )

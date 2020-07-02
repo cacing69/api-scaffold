@@ -1,7 +1,7 @@
 package db
 
 import (
-	"api-sambasku/conf"
+	"api-scaffold/conf"
 	"fmt"
 	"log"
 
