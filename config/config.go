@@ -1,4 +1,4 @@
-package conf
+package config
 
 import (
 	"log"
@@ -18,7 +18,6 @@ type conf struct {
 var T conf
 
 func init() {
-	// readConfig()
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.SetConfigName("app.config")
