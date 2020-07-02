@@ -1,20 +1,75 @@
-package action
+package controller
 
 import (
 	"api-sambasku/db"
 	"api-sambasku/lib"
 	"api-sambasku/mod"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func IndexTester(c *gin.Context) {
 	var data []mod.Tester
+	var count int
 
-	db.T.Find(&data)
+	// done := make(chan bool)
 
-	c.JSON(http.StatusOK, gin.H{"data": data})
+	page := c.DefaultQuery("page", "1")
+	limit := c.DefaultQuery("limit", "20")
+
+	_page, _ := strconv.Atoi(page)
+	_limit, _ := strconv.Atoi(limit)
+
+	_offset := (_page - 1) * _limit
+
+	_id := c.Query("id")
+	_key := c.Query("key")
+
+	q := db.T.Model(&mod.Tester{})
+
+	log.Println(_id)
+	log.Println(len(_id))
+
+	if len(_id) > 0 {
+		q = q.Where("tester_id = ?", _id)
+	}
+
+	if len(_key) > 0 {
+		q = q.Where("tester_key like ?", "%"+_key+"%")
+	}
+
+	// go func() {
+	q.Limit(_limit).Offset(_offset).Find(&data)
+	q.Count(&count)
+
+	// 	done <- true
+	// }()
+
+	// done <- true
+
+	meta := gin.H{
+		"total":     count,
+		"page":      _page,
+		"per_page":  _limit,
+		"last_page": 1,
+	}
+	// select {
+	// case <-c.Request.Context().Done():
+	// 	// if err := c.Done(); err != nil {
+	// 	log.Printf("%#v", c.Err())
+	// 	// if strings.Contains(strings.ToLower(err.Error()), "canceled") {
+	// 	// 	log.Println("request canceled")
+	// 	// } else {
+	// 	// 	log.Println("unknown error occured.", err.Error())
+	// 	// }
+	// 	// }
+	// case <-done:
+	c.JSON(http.StatusOK, gin.H{"data": data, "meta": meta})
+	// }
+
 }
 
 func CreateTester(c *gin.Context) {

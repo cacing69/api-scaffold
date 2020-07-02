@@ -2,7 +2,6 @@ package db
 
 import (
 	"api-sambasku/conf"
-	"api-sambasku/mod"
 	"fmt"
 	"log"
 
@@ -35,7 +34,7 @@ func Connect() {
 		panic(err.Error())
 	}
 
-	database.AutoMigrate(&mod.Tester{})
+	// database.AutoMigrate(&mod.Tester{})
 
 	T = database
 }

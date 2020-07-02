@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api-sambasku/action"
 	_ "api-sambasku/conf"
+	"api-sambasku/controller"
 	"api-sambasku/db"
 
 	"github.com/gin-gonic/gin"
@@ -18,11 +18,11 @@ func main() {
 		c.JSON(200, gin.H{"data": appName})
 	})
 
-	r.GET("/tester", action.IndexTester)
-	r.POST("/tester", action.CreateTester)
-	r.GET("/tester/:id", action.FindTester)
-	r.PATCH("/tester/:id", action.UpdateTester)
-	r.DELETE("/tester/:id", action.DeleteTester)
+	r.GET("/tester", controller.IndexTester)
+	r.POST("/tester", controller.CreateTester)
+	r.GET("/tester/:id", controller.FindTester)
+	r.PATCH("/tester/:id", controller.UpdateTester)
+	r.DELETE("/tester/:id", controller.DeleteTester)
 
 	r.Run(port)
 }
